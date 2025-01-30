@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawTawk Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            transition: all 0.2s ease-in-out;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        body.dark {
+            background: linear-gradient(135deg, #222222 0%, #333333 100%);
+            color: #e5e5e5;
+        }
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .dark .navbar {
+            background-color: rgba(51, 51, 51, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #404040;
+        }
+
+        .chat-container {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .dark .chat-container {
+            background-color: rgba(64, 64, 64, 0.8);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #9ca3af;
+            font-size: 1.25rem;
+            font-weight: 500;
+            opacity: 0.8;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .dark .welcome-message {
+            color: #d1d5db;
+        }
+
+        .message {
+            display: inline-block;
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            margin: 0.5rem;
+            animation: fadeIn 0.3s ease-in-out;
+            position: relative;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .message p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .message-wrapper {
+            width: 100%;
+            display: flex;
+            margin: 0.5rem 0;
+        }
+
+        .user-message-wrapper {
+            justify-content: flex-end;
+        }
+
+        .bot-message-wrapper {
+            justify-content: flex-start;
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #f59e0b 0%, #e07b00 100%);
+            color: white;
+        }
+
+        .dark .user-message {
+            background: linear-gradient(135deg, #666666 0%, #595959 100%);
+            color: #ffffff;
+        }
+
+        .bot-message {
+            background: linear-gradient(135deg, #f59e0b 0%, #e07b00 100%);
+            color: white;
+        }
+
+        .dark .bot-message {
+            background: linear-gradient(135deg, #4a4a4a 0%, #404040 100%);
+            color: #ffffff;
+            border: 1px solid rgba(102, 102, 102, 0.3);
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .dark .input-container {
+            background: rgba(64, 64, 64, 0.8);
+            border: 1px solid #4a4a4a;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.75rem 0;
+            color: #1a202c;
+            outline: none;
+        }
+
+        .dark .chat-input {
+            color: #ffffff;
+        }
+
+        .send-btn {
+            position: static;
+            transform: none !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s ease;
+            background: linear-gradient(135deg, #f59e0b 0%, #e07b00 100%);
+            color: white;
+        }
+
+        .dark .send-btn {
+            background: linear-gradient(135deg, #666666 0%, #595959 100%);
+            color: #ffffff;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05) !important;
+        }
+
+        .brand {
+            background: linear-gradient(135deg, #f59e0b 0%, #e07b00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dark .brand {
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <nav class="navbar fixed top-0 w-full px-6 py-4 z-50 bg-opacity-80 backdrop-blur-md shadow-2xl">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="main.html" class="text-2xl font-bold brand">LawTawk</a>
+            <div class="flex items-center space-x-8">
+                
+                <button id="theme-toggle" class="p-2 rounded-full transition-colors">
+                    <i class="fas fa-sun text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-20 pb-24 px-4 max-w-7xl mx-auto">
+        <div id="chat-container" class="chat-container rounded-2xl backdrop-blur-md p-6 h-[calc(100vh-12rem)] overflow-y-auto relative">
+            <div id="welcome-message" class="welcome-message">
+                How can I help you today?
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-transparent">
+        <div class="max-w-7xl mx-auto">
+            <form id="chat-form" class="input-container">
+                <input type="text" id="user-input" class="chat-input" placeholder="Type your message...">
+                <button type="submit" class="send-btn">
+                    <span>Send</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const themeToggle = document.getElementById('theme-toggle');
+        const welcomeMessage = document.getElementById('welcome-message');
+        let isDarkMode = false;
+        let isFirstMessage = true;
+
+        function addMessage(message, isUser = false) {
+            if (isFirstMessage) {
+                welcomeMessage.classList.add('hidden');
+                isFirstMessage = false;
+            }
+
+            const wrapperDiv = document.createElement('div');
+            wrapperDiv.className = `message-wrapper ${isUser ? 'user-message-wrapper' : 'bot-message-wrapper'}`;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            
+            wrapperDiv.appendChild(messageDiv);
+            chatContainer.appendChild(wrapperDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function typeMessage(message, callback) {
+            const wrapperDiv = document.createElement('div');
+            wrapperDiv.className = 'message-wrapper bot-message-wrapper';
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message';
+            wrapperDiv.appendChild(messageDiv);
+            chatContainer.appendChild(wrapperDiv);
+
+            let i = 0;
+            const speed = 30;
+            
+            function type() {
+                if (i < message.length) {
+                    messageDiv.innerHTML = `<p>${message.substring(0, i + 1)}</p>`;
+                    i++;
+                    setTimeout(type, speed);
+                } else if (callback) {
+                    callback();
+                }
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            
+            type();
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            userInput.value = '';
+
+            setTimeout(() => {
+                typeMessage("I'm analyzing your legal query. Please wait a moment...");
+            }, 500);
+        });
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            isDarkMode = !isDarkMode;
+            themeToggle.innerHTML = isDarkMode ? 
+                '<i class="fas fa-moon text-xl"></i>' : 
+                '<i class="fas fa-sun text-xl"></i>';
+        });
+    </script>
+</body>
+</html>

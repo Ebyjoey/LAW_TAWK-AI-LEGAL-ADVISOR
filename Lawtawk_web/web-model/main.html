@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalBot - Your Virtual Legal Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .slide-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-up.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 5px rgba(244, 158, 11, 0.5);
+        }
+
+        .submit-btn {
+            background-color: #f59e0b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #e07b00;
+            cursor: pointer;
+        }
+
+        .submit-btn:active {
+            background-color: #c96d00;
+        }
+
+        .contact-form {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .contact-form.show {
+            max-height: 500px;
+        }
+
+        .navbar {
+            transition: box-shadow 0.4s ease-in-out;
+            box-shadow: 0px 6px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar:hover {
+            box-shadow: 0px 6px 30px #c96d00;
+        }
+
+        .offset {
+            scroll-margin-top: 25vh;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+    <!-- Navbar -->
+    <nav class="navbar fixed top-0 w-full bg-white bg-opacity-80 shadow-2xl py-4 px-10 flex justify-between items-center rounded-b-lg z-50 transition-all duration-300 ease-in-out">
+        <a href="main.html" class="text-2xl font-bold">LawTawk</a>
+        <div class="flex items-center space-x-8">
+            <ul class="flex space-x-6 text-lg">
+                <li><a href="#about" class="hover:underline">About Us</a></li>
+                <li><a href="#try-contact" class="hover:underline">Contact Us</a></li>
+            </ul>
+            <a href="chatbot.html" class="bg-orange-500 text-white px-6 py-2 rounded-full text-lg shadow-md hover:bg-orange-600 transition-all">
+                Get Started
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="intro" class="h-screen flex flex-col justify-center items-center text-center px-6 bg-cover bg-center bg-no-repeat shadow-md slide-up" style="background-image: url('images/ing5.png');">
+        <h1 class="text-7xl md:text-8xl font-extrabold mb-4 text-black">Introducing LawTawk</h1>
+        <p class="text-xl md:text-2xl font-bold mt-4 slide-up delay-200 max-w-3xl text-black">
+            Experience LegalBot for your legal needs—fast, convenient, and affordable.
+        </p>
+        <p class="text-lg md:text-xl mt-2 slide-up delay-300 text-black">
+            Your AI-powered virtual lawyer for instant legal guidance.
+        </p>
+        <a href="chatbot.html" class="bg-orange-500 text-white px-8 py-3 mt-6 rounded-full text-lg shadow-md hover:bg-orange-600 transition-all slide-up delay-400">
+            Get Started
+        </a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="relative flex flex-col md:flex-row items-center bg-white shadow-lg my-12 rounded-lg">
+        <div class="w-full md:w-1/2 text-center p-10">
+            <h2 class="text-4xl font-semibold mb-6">About Our Product</h2>
+            <p class="text-lg mb-6">LegalBot provides fast, accurate, and reliable legal assistance.</p>
+            <h2 class="text-4xl font-semibold mb-6">How It Will Help You</h2>
+            <p class="text-lg mb-6">LegalBot saves you time and money with instant legal help.</p>
+            <h2 class="text-4xl font-semibold mb-6">Features</h2>
+            <ul class="text-lg space-y-2">
+                <li>⚖️ AI-Powered Legal Assistance</li>
+                <li>📄 Automated Legal Document Creation</li>
+                <li>📝 Tailored Legal Advice</li>
+                <li>🔍 Quick Legal Research</li>
+                <li>🗣️ Voice-to-Text & Text-to-Speech</li>
+            </ul>
+        </div>
+        <div class="w-full md:w-1/2 flex justify-center">
+            <img src="images/img2.jpg" alt="LegalBot" class="w-7/10 h-auto object-cover rounded-lg sticky top-0">
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="try-contact" class="offset relative flex flex-col md:flex-row items-center bg-white shadow-lg my-12 rounded-lg p-">
+        <div class="w-full md:w-1/2 flex justify-center">
+            <img src="images/img2.png" alt="Try our product" class="w-3/5 h-auto object-cover rounded-lg sticky top-0">
+        </div>
+        <div class="w-full md:w-1/2 flex flex-col items-center p-10">
+            <div class="text-center mb-8">
+                <h2 class="text-5xl font-bold mb-6">Contact Us</h2>
+                <p class="text-lg mb-6">Have questions or need support? Reach out to us.</p>
+                <button class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-full text-lg contact-btn"
+                    onclick="toggleContactForm()">Contact Us</button>
+            </div>
+            
+            <!-- Contact Form -->
+            <div id="contact-form" class="contact-form w-full">
+                <div class="bg-white rounded-lg p-6 w-full">
+                    <h3 class="text-3xl font-semibold mb-6">Get in Touch</h3>
+                    <form action="#" method="POST">
+                        <input type="text" name="name" placeholder="Your Name" class="input-field">
+                        <input type="email" name="email" placeholder="Your Email" class="input-field">
+                        <textarea name="message" placeholder="Your Message" class="input-field h-32"></textarea>
+                        <button type="submit" class="submit-btn w-full mt-4">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white bg-opacity-90 shadow-lg rounded-t-lg py-8 text-center">
+        <div class="flex flex-col md:flex-row justify-around">
+            <div>
+                <h3 class="text-xl font-semibold">Quick Links</h3>
+                <ul class="space-y-2 mt-2">
+                    <li><a href="#about" class="hover:underline">About</a></li>
+                    <li><a href="#try-contact" class="hover:underline">Try Our Product</a></li>
+                    <li><a href="#contact" class="hover:underline">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold">Follow Us</h3>
+                <ul class="space-y-2 mt-2">
+                    <li><a href="#" class="hover:underline">🔗 LinkedIn</a></li>
+                    <li><a href="#" class="hover:underline">🐦 Twitter</a></li>
+                    <li><a href="#" class="hover:underline">📘 Facebook</a></li>
+                </ul>
+            </div>
+        </div>
+        <p class="mt-6">&copy; 2025 LegalBot. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const elements = document.querySelectorAll(".slide-up");
+
+            const slideUpOnScroll = () => {
+                elements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight * 0.9) {
+                        el.classList.add("show");
+                    }
+                });
+            };
+
+            window.addEventListener("scroll", slideUpOnScroll);
+            slideUpOnScroll();
+        });
+
+        function toggleContactForm() {
+            const contactForm = document.getElementById("contact-form");
+            contactForm.classList.toggle("show");
+        }
+    </script>
+</body>
+</html>
